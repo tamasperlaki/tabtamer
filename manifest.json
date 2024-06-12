@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "FreeFirefox",
+  "version": "1.0",
+  "description": "Adds a red border to all webpages matching mozilla.org.",
+  "background": {
+      "scripts": ["tamer.js"],
+      "type": "module"
+    },
+  "permissions": [
+    "tabs"
+  ]
+}
