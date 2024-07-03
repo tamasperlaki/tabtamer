@@ -1,13 +1,14 @@
 {
   "manifest_version": 3,
-  "name": "FreeFirefox",
+  "name": "Tab Tamer",
   "version": "1.0",
-  "description": "Adds a red border to all webpages matching mozilla.org.",
+  "description": "Periodically discards old tabs to free up memory",
   "background": {
       "scripts": ["tamer.js"],
       "type": "module"
     },
   "permissions": [
-    "tabs"
+    "tabs",
+    "alarms"
   ]
 }
