@@ -13,7 +13,9 @@ browser.alarms.onAlarm.addListener((async function (alarmInfo) {
 
     const discardCandidateTabs = await browser.tabs.query({
         discarded: false,
-        active: false
+        active: false,
+        audible: false,
+        pinned: false
     });
     discardCandidateTabs.forEach(t => console.log(`Got: Id: ${t.id}, url: ${t.url}, lastAccessed: ${new Date(t.lastAccessed)}`));
     console.log("Got list of potentially discardable tabs: %o", discardCandidateTabs);
@@ -23,16 +25,15 @@ browser.alarms.onAlarm.addListener((async function (alarmInfo) {
 
     var tabIdsToDiscard = discardCandidateTabs
         .filter(t => !t.url.startsWith("about"))
+        .filter(t => t.url.indexOf("mail.google.com") < 0)
+        .filter(t => t.url.indexOf("calendar.google.com") < 0) 
         .filter(t => t.lastAccessed < timeToLiveTimestamp)
-        .map(t => {
-            console.log(`Adding tab to discard list. Id: ${t.id}, url: ${t.url}, lastAccessed: ${new Date(t.lastAccessed)}`);
-            return t;
-        })
         .reduce((idsToDiscard, tab) => { 
+            console.log(`Adding tab to discard list. Id: ${tab.id}, url: ${tab.url}, lastAccessed: ${new Date(tab.lastAccessed)}`);
             idsToDiscard.push(tab.id);
             return idsToDiscard;
         }, []);
-    console.log("Tab ids to discard: %o", tabIdsToDiscard);
+    console.log("Discarding tabs with Ids: %o", tabIdsToDiscard);
     browser.tabs.discard(tabIdsToDiscard);
 }));
 
